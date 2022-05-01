@@ -1,0 +1,14 @@
+#!/bin/bash
+
+progName=winrar
+progRealPath=$SNAP/usr/share/$progName
+progHome=$SNAP_USER_DATA/$progName
+
+if [ ! -d $progHome ];then
+  ensure_dir_exists $progHome
+fi
+
+# Delete broken symlinks
+find "$progHome/" -type l -delete &>/dev/null
+# Update existing symlinks, add new symlinks
+cp -urs "$progRealPath/"* "$progHome" &>/dev/null

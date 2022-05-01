@@ -1,0 +1,126 @@
+name: winrar
+title: WinRAR (WINE)
+summary: WinRAR is a file archiver utility for Windows.
+description: |
+ It can create and view archives in RAR or ZIP file formats, and unpack numerous archive file formats. It can backup your data and reduce the size of email attachments, open and unpack RAR, ZIP and other archive formats.
+adopt-info: winrar
+
+confinement: strict
+grade: stable
+architectures:
+  - build-on: amd64
+  - build-on: i386
+base: core18
+compression: lzo
+
+plugs:
+  wine-runtime:
+    interface: content
+    target: $SNAP/wine-runtime
+    default-provider: wine-platform-runtime
+  wine-6-stable:
+    interface: content
+    target: $SNAP/wine-platform
+    default-provider: wine-platform-6-stable
+
+environment:
+  WINEDLLOVERRIDES: "mscoree,mshtml=" # Prevent pop-ups about Wine Mono and Wine Gecko
+  RUN_EXE: "$SNAP_USER_DATA/winrar/winrar.exe"
+  SOMMELIER_KEEP_CWD: "1" # Don't change the working directory so relative paths still work
+  NO_AT_BRIDGE: "1" # Fix yad error Failed to connect to socket /tmp/dbus-xxx: No such file or directory
+  DISABLE_WAYLAND: "1" # Fix gtk decoration under wayland session
+
+apps:
+  winrar:
+    extensions: [ gnome-3-28 ]
+    command: bin/sommelier run-exe
+    plugs:
+      - opengl
+      - home
+      - network
+      - hardware-observe
+      - process-control
+      - cups-control
+      - removable-media
+    desktop: usr/share/applications/winrar.desktop
+  # The wine command can be used to run applications inside the wine
+  # environment that this snap uses.
+  #
+  # For example, users can configure the wine environment of this snap
+  # by running `myapp.wine winecfg`.
+  wine:
+    extensions: [ gnome-3-28 ]
+    command: bin/sommelier
+    plugs:
+      - home
+      - network
+      - hardware-observe
+      - process-control
+      - cups-control
+      - removable-media
+  # The winetricks command can be used to run winetricks inside the wine
+  # environment that this snap uses.
+  winetricks:
+    extensions: [ gnome-3-28 ]
+    command: bin/sommelier winetricks
+    plugs:
+      - network
+  # used for winrar extract files rightclick menu under files
+  wef:
+    extensions: [ gnome-3-28 ]
+    command: bin/sommelier wef
+    plugs:
+      - desktop
+      - desktop-legacy
+      - gsettings
+      - opengl
+      - wayland
+      - x11
+      - network
+      - home
+      - removable-media
+  # used for winrar extract here rightclick menu under files
+  weh:
+    extensions: [ gnome-3-28 ]
+    command: bin/sommelier weh
+    plugs:
+      - desktop
+      - desktop-legacy
+      - gsettings
+      - opengl
+      - wayland
+      - x11
+      - network
+      - home
+      - removable-media
+
+parts:
+  winrar:
+    plugin: nil
+    source: ./snap/local/src
+    override-build: |
+      snapcraftctl build
+      set -ex
+      ver=$(wget -qO- https://www.rarlab.com/download.htm | grep ") [0-9]" | sed 's|<| |g' | awk '{print $5}' | head -n1)
+      snapcraftctl set-version "$ver"
+      ./dl_wrar
+    stage:
+      - bin
+      - usr
+      - wine-platform
+      - wine-runtime
+      - sommelier
+    build-packages: [wget, unrar]
+  # The sommelier script helps you snap Windows applications using Wine. It
+  # initializes and configures Wine and installs the Windows application.
+  sommelier:
+    plugin: make
+    source: https://github.com/mmtrt/sommelier-core.git
+    source-branch: "winrar-fixes"
+
+  # This reverts changes from https://github.com/snapcore/snapcraft/pull/3586
+  fix-fontconfig:
+    plugin: nil
+    after: [gnome-3-28-extension]
+    override-prime: |
+      sed -i '/snap-package/,+1d' $SNAPCRAFT_PRIME/snap/command-chain/desktop-launch

@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+#
+# Author:
+#   mmtrt [Taqi Raza]
+#
+# Description:
+#   download and prepare winrar for snap
+#
+# Date: Apr 30 2022
+#
+
+dlwrar () {
+    ARCHITECTURE=$(dpkg --print-architecture)
+    dl_ver=$(wget -qO- "https://www.rarlab.com/download.htm" | grep ") [0-9]" | sed 's|<| |g;s/\.//' | awk '{print $5}' | head -n1)
+    if [ "${ARCHITECTURE}" = "amd64" ]; then
+     wget "https://www.rarlab.com/rar/winrar-x64-$dl_ver.exe" &> /dev/null
+     unrar e winrar-x64-"$dl_ver".exe "./usr/share/winrar/"
+    elif [ "${ARCHITECTURE}" = "i386" ]; then
+     wget "https://www.rarlab.com/rar/winrar-x32-$dl_ver.exe" &> /dev/null
+     unrar e winrar-x32-"$dl_ver".exe "./usr/share/winrar/"
+    else
+     echo "ERROR! winrar only produces software for amd64 and i386. Failing the build here."
+     exit 1
+    fi
+}
+
+mkwrar () {
+    mkdir -p ./{wine-runtime,wine-platform,bin} && mkdir -p sommelier/hooks && mkdir -p usr/share/{pixmaps,applications}
+    rm -r ./usr/share/winrar/{*.png,*.msix,*.pri,RarExtInstaller.exe,Uninstall.exe,Uninstall.lst} && mv usr/share/winrar/WinRAR.exe usr/share/winrar/winrar.exe
+    find "usr" -type d -execdir chmod 755 {} +
+}
+
+mkdsk () {
+cat > winrar.desktop <<'EOF1'
+[Desktop Entry]
+Name=WinRAR
+GenericName=Archiving Tool
+Comment=WinRAR is a file archiver utility for Windows, developed by Eugene Roshal of win.rar GmbH.
+Encoding=UTF-8
+Version=1.0
+Type=Application
+Terminal=false
+Icon=${SNAP}/usr/share/pixmaps/winrar.png
+TryExec=winrar
+Exec=winrar %F
+StartupWMClass=winrar.exe
+Categories=Utility;Archiving;Compression;
+MimeType=application/x-tar;application/x-compressed-tar;application/x-bzip-compressed-tar;application/x-tarz;application/x-xz-compressed-tar;application/x-lzma-compressed-tar;application/x-lzip-compressed-tar;application/x-tzo;application/x-lrzip-compressed-tar;application/x-lz4-compressed-tar;application/x-zstd-compressed-tar;application/vnd.debian.binary-package;application/x-deb;application/x-rpm;application/x-source-rpm;application/vnd.ms-cab-compressed;application/x-xar;application/x-iso9660-appimage;application/x-archive;application/vnd.rar;application/x-rar;application/x-7z-compressed;application/zip;application/x-java-archive;application/x-compress;application/gzip;application/x-bzip;application/x-lzma;application/x-xz;application/x-wine-extension-001;application/x-wine-extension-r00;application/x-wine-extension-r01;application/x-wine-extension-r02;application/x-wine-extension-r03;application/x-wine-extension-r04;application/x-wine-extension-r05;application/x-wine-extension-r06;application/x-wine-extension-r07;application/x-wine-extension-r08;application/x-wine-extension-r09;application/x-wine-extension-r10;application/x-wine-extension-r11;application/x-wine-extension-r12;application/x-wine-extension-r13;application/x-wine-extension-r14;application/x-wine-extension-r15;application/x-wine-extension-r16;application/x-wine-extension-r17;application/x-wine-extension-r18;application/x-wine-extension-r19;application/x-wine-extension-r20;application/x-wine-extension-r21;application/x-wine-extension-r22;application/x-wine-extension-r23;application/x-wine-extension-r24;application/x-wine-extension-r25;application/x-wine-extension-r26;application/x-wine-extension-r27;application/x-wine-extension-r28;application/x-wine-extension-r29;application/x-wine-extension-tzst;application/x-wine-extension-uu;application/x-wine-extension-xxe;application/x-wine-extension-zipx;application/x-wine-extension-zst;
+EOF1
+}
+
+dlwrar
+mkdsk
+mkwrar
+mv pre-install sommelier/hooks && mv winrar.desktop usr/share/applications && mv winrar.png usr/share/pixmaps && cp -R -p {sommelier,bin,usr,wine-runtime,wine-platform} $SNAPCRAFT_PART_INSTALL
