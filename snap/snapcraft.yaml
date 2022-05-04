@@ -65,10 +65,38 @@ apps:
     command: bin/sommelier winetricks
     plugs:
       - network
+  # used for winrar compress files rightclick menu under files
+  wcf:
+    extensions: [ gnome-3-28 ]
+    command: bin/sommelier wcf
+    plugs:
+      - desktop
+      - desktop-legacy
+      - gsettings
+      - opengl
+      - wayland
+      - x11
+      - network
+      - home
+      - removable-media
   # used for winrar extract files rightclick menu under files
   wef:
     extensions: [ gnome-3-28 ]
     command: bin/sommelier wef
+    plugs:
+      - desktop
+      - desktop-legacy
+      - gsettings
+      - opengl
+      - wayland
+      - x11
+      - network
+      - home
+      - removable-media
+  # used for winrar extract to subdir rightclick menu under files
+  wefs:
+    extensions: [ gnome-3-28 ]
+    command: bin/sommelier wefs
     plugs:
       - desktop
       - desktop-legacy
