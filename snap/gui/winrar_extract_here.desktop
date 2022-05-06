@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Extract Here
+Comment=WinRAR is a file archiver utility for Windows, developed by Eugene Roshal of win.rar GmbH.
+Encoding=UTF-8
+Version=1.0
+Type=Application
+NoDisplay=true
+Icon=${SNAP}/usr/share/pixmaps/winrar.png
+Exec=winrar.weh %F
+StartupWMClass=winrar.exe
+Categories=Utility;Archiving;Compression;
+MimeType=application/x-tar;application/x-compressed-tar;application/x-bzip-compressed-tar;application/x-tarz;application/x-xz-compressed-tar;application/x-lzma-compressed-tar;application/x-lzip-compressed-tar;application/x-tzo;application/x-lrzip-compressed-tar;application/x-lz4-compressed-tar;application/x-zstd-compressed-tar;application/vnd.debian.binary-package;application/x-deb;application/x-rpm;application/x-source-rpm;application/vnd.ms-cab-compressed;application/x-xar;application/x-iso9660-appimage;application/x-archive;application/vnd.rar;application/x-rar;application/x-7z-compressed;application/zip;application/x-java-archive;application/x-compress;application/gzip;application/x-bzip;application/x-lzma;application/x-xz;

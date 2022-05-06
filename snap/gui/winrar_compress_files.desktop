@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Add to archive...
+Comment=WinRAR is a file archiver utility for Windows, developed by Eugene Roshal of win.rar GmbH.
+Encoding=UTF-8
+Version=1.0
+Type=Application
+NoDisplay=true
+Icon=${SNAP}/usr/share/pixmaps/winrar.png
+Exec=winrar.wcf %F
+StartupWMClass=winrar.exe
+Categories=Utility;Archiving;Compression;
+MimeType=text/plain;text/css;text/html;text/x-c++hdr;text/x-c++src;text/x-chdr;text/x-java;text/x-makefile;text/x-python;text/x-sh;application/x-wine-extension-ini;application/x-wine-extension-inf;application/x-ms-dos-executable;application/x-msdownload;inode/directory;image/gif;image/jpeg;image/png;image/bmp;image/x-eps;image/x-icns;image/x-ico;image/x-portable-bitmap;image/x-portable-graymap;image/x-portable-pixmap;image/x-xbitmap;image/x-xpixmap;image/tiff;image/x-psd;image/x-webp;image/webp;image/x-tga;audio/aac;audio/x-ape;audio/basic;audio/mp4;audio/mpeg;audio/mpegurl;audio/vorbis;audio/x-flac;audio/x-mp2;audio/x-mp3;audio/x-mpegurl;audio/x-ms-wma;audio/x-oggflac;audio/x-speex;audio/x-vorbis;audio/x-wav;audio/m3u;audio/x-aifc;audio/x-aiffc;audio/x-aiff;audio/x-musepack;audio/x-wavpack;x-content/audio-player;audio/x-matroska;audio/x-vorbis+ogg;
