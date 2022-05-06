@@ -22,10 +22,6 @@ plugs:
     interface: content
     target: $SNAP/wine-platform
     default-provider: wine-platform-6-stable
-  winrar-kde5-cfg:
-    interface: personal-files
-    write:
-      - $HOME/.local/share/kservices5
 
 environment:
   WINEDLLOVERRIDES: "mscoree,mshtml=" # Prevent pop-ups about Wine Mono and Wine Gecko
@@ -46,7 +42,6 @@ apps:
       - process-control
       - cups-control
       - removable-media
-      - winrar-kde5-cfg
     desktop: usr/share/applications/winrar.desktop
   # The wine command can be used to run applications inside the wine
   # environment that this snap uses.
