@@ -178,8 +178,6 @@ parts:
       set -ex
       ver=$(wget -qO- https://www.rarlab.com/download.htm | grep ") [0-9]" | sed 's|<| |g' | awk '{print $5}' | head -n1)
       snapcraftctl set-version "$ver"
-      mkdir -p $SNAPCRAFT_PART_INSTALL/winedata
-      cp *.desktop $SNAPCRAFT_PART_INSTALL/winedata
       ./dl_wrar
     stage:
       - bin
@@ -187,7 +185,6 @@ parts:
       - wine-platform
       - wine-runtime
       - sommelier
-      - winedata
     build-packages: [wget, unrar]
   # The sommelier script helps you snap Windows applications using Wine. It
   # initializes and configures Wine and installs the Windows application.
