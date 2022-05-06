@@ -121,6 +121,48 @@ apps:
       - network
       - home
       - removable-media
+  # used for winrar quick compress files rightclick menu under files
+  wqc:
+    extensions: [ gnome-3-28 ]
+    command: bin/sommelier wqc
+    plugs:
+      - desktop
+      - desktop-legacy
+      - gsettings
+      - opengl
+      - wayland
+      - x11
+      - network
+      - home
+      - removable-media
+  # used for winrar repair compressed files rightclick menu under files
+  wra:
+    extensions: [ gnome-3-28 ]
+    command: bin/sommelier wra
+    plugs:
+      - desktop
+      - desktop-legacy
+      - gsettings
+      - opengl
+      - wayland
+      - x11
+      - network
+      - home
+      - removable-media
+  # used for winrar test compressed files rightclick menu under files
+  wta:
+    extensions: [ gnome-3-28 ]
+    command: bin/sommelier wta
+    plugs:
+      - desktop
+      - desktop-legacy
+      - gsettings
+      - opengl
+      - wayland
+      - x11
+      - network
+      - home
+      - removable-media
 
 parts:
   winrar:
