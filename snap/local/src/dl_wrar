@@ -10,18 +10,9 @@
 #
 
 dlwrar () {
-    ARCHITECTURE=$(dpkg --print-architecture)
     dl_ver=$(wget -qO- "https://www.rarlab.com/download.htm" | grep ") [0-9]" | sed 's|<| |g;s/\.//' | awk '{print $5}' | head -n1)
-    if [ "${ARCHITECTURE}" = "amd64" ]; then
-     wget "https://www.rarlab.com/rar/winrar-x64-$dl_ver.exe" &> /dev/null
-     unrar e winrar-x64-"$dl_ver".exe "./usr/share/winrar/"
-    elif [ "${ARCHITECTURE}" = "i386" ]; then
-     wget "https://www.rarlab.com/rar/winrar-x32-$dl_ver.exe" &> /dev/null
-     unrar e winrar-x32-"$dl_ver".exe "./usr/share/winrar/"
-    else
-     echo "ERROR! winrar only produces software for amd64 and i386. Failing the build here."
-     exit 1
-    fi
+    wget "https://www.rarlab.com/rar/winrar-x64-$dl_ver.exe" &> /dev/null
+    unrar e winrar-x64-"$dl_ver".exe "./usr/share/winrar/"
 }
 
 mkwrar () {
