@@ -9,9 +9,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v6
       with:
-        token: ${{ secrets.PAT }}
+        token: ${{ secrets.GITHUB_TOKEN }}
     - name: get-latest-version
       run: |
         VERSION="$(wget -qO- https://www.rarlab.com/download.htm | grep ") [0-9]" | sed 's|<| |g' | awk '{print $5}' | head -n1)"
